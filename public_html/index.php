@@ -177,7 +177,7 @@ if (!isset($_REQUEST['p'])) { ?>
 			$pie_data2[] = $row[1];
 			$row[1] = "<a href=\"https://wikidata.org/wiki/" . $row[1] . "\">". $row[1] . "</a>";
 		};
-		$d = array($row[0], $row[1], $row[2], $row[3], fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2]), fixer($row[8] / $row[2]), fixer($row[9] / $row[2]), fixer($row[10] / $row[2]));
+		$d = array($row[0], $row[1], number_format($row[2]), number_format($row[3]), fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2]), fixer($row[8] / $row[2]), fixer($row[9] / $row[2]), fixer($row[10] / $row[2]));
 		$bar_data[] = implode(',', array(fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2])));
 		$bar_data2[] = implode(',', array(fixer($row[8] / $row[2]), fixer($row[9] / $row[2]), fixer($row[10] / $row[2])));
 		echo "<tr>\n<td>{$d[0]}</td>\n<td>{$d[1]}</td><td>{$d[2]}</td><td>{$d[3]}</td><td>{$d[4]}</td><td>{$d[5]}</td><td>{$d[6]}</td><td>{$d[7]}</td><td>{$d[8]}</td><td>{$d[9]}</td><td>{$d[10]}</td></tr>";
