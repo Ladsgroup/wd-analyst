@@ -168,7 +168,7 @@ if (!isset($_REQUEST['p'])) { ?>
 	foreach ($result as $row) {
 		if ($row[1] == 0) {
 			$row[1] = "\n<div class=\"ui ribbon label\">All values</div>\n";
-			$row[0] = "<a href=\"https://wikidata.org/wiki/P" . $row[0] . "\">P". $row[0] . "</a>";
+			$row[0] = "<a href=\"https://wikidata.org/wiki/Property:P" . $row[0] . "\">P". $row[0] . "</a>";
 		} else {
 			$row[1] = "Q" . $row[1];
 			$row[0] = "P" . $row[0];
