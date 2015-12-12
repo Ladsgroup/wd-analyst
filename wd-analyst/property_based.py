@@ -1,24 +1,9 @@
-from core import DumpReader
-import pymysql
+from core import DumpReader, DatabaseHandler
+
 import sys
-dump = DumpReader('/public/dumps/public/wikidatawiki/entities/20151130/wikidata-20151130-all.json.bz2', 20000000)
+dump = DumpReader('/public/dumps/public/wikidatawiki/entities/20151130/wikidata-20151130-all.json.bz2', 20000)
 data = {}
-"""
-CREATE TABLE property
-(
-property INT(15) NOT NULL,
-value INT(15) NOT NULL,
-no_item INT(15) NOT NULL,
-no_uniq_items INT(15) NOT NULL,
-no_labels INT(15) NOT NULL,
-no_site_links INT(15) NOT NULL,
-no_descriptions INT(15) NOT NULL,
-no_claims INT(15) NOT NULL,
-no_qua INT(15) NOT NULL,
-no_ref INT(15) NOT NULL,
-no_wiki_ref INT(15) NOT NULL
-);
-"""
+
 
 for item_content in dump.run():
     if item_content['type'] != 'item':
@@ -37,10 +22,11 @@ for item_content in dump.run():
             no_qua = len(claim.get('qualifiers', []))
             no_refs = len(claim.get('references', []))
             no_wiki_ref = 0
+            no_no_ref = 1 if not claim.get('references', []) else 0
             for ref in claim.get('references', []):
                 if 'P143' in ref.get('snaks', {}):
                     no_wiki_ref += 1
-            data_to_add = [1, 0, no_labels, no_site_links, no_descriptions, no_claims, no_qua, no_refs, no_wiki_ref]
+            data_to_add = [1, 0, no_labels, no_site_links, no_descriptions, no_claims, no_qua, no_refs, no_wiki_ref, no_no_ref]
             old_data = data.get((pid_int, 0), [0] * len(data_to_add))
             if not uniqe_added:
                 uniqe_added = True
@@ -60,19 +46,41 @@ for item_content in dump.run():
                 new_data = [data_to_add[i] + old_data[i] for i in range(len(data_to_add))]
                 data[(pid_int, val)] = new_data
 
-db = pymysql.connect(host="tools-db", db="s52781__wd_p",
-                     read_default_file="~/replica.my.cnf")
-cursor = db.cursor()
+db_handler = DatabaseHandler('propertyy')
 
+db_handler.connect()
+db_handler.cursor.execute('DROP TABLE propertyy;')
+db_handler.finalize()
+
+sql_query = """
+CREATE TABLE propertyy
+(
+property INT(15) NOT NULL,
+value INT(15) NOT NULL,
+no_item INT(15) NOT NULL,
+no_uniq_items INT(15) NOT NULL,
+no_labels INT(15) NOT NULL,
+no_site_links INT(15) NOT NULL,
+no_descriptions INT(15) NOT NULL,
+no_claims INT(15) NOT NULL,
+no_qua INT(15) NOT NULL,
+no_ref INT(15) NOT NULL,
+no_wiki_ref INT(15) NOT NULL
+no_no_ref INT(15) NOT NULL
+);
+"""
+db_handler.connect()
+db_handler.cursor.execute(sql_query)
+db_handler.finalize()
+
+db_handler.connect()
 for case in data:
     val = data[case]
     insert_statement = (
         "INSERT INTO property "
-        "(property, value, no_item, no_uniq_items, no_labels, no_site_links, no_descriptions, no_claims, no_qua, no_ref, no_wiki_ref) "
-        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
-    cursor.execute(insert_statement,
-                    (case[0], case[1], val[0], val[1], val[2], val[3], val[4], val[5], val[6], val[7], val[8]))
-db.commit()
-cursor.close()
-db.close()
+        "(property, value, no_item, no_uniq_items, no_labels, no_site_links, "
+        "no_descriptions, no_claims, no_qua, no_ref, no_wiki_ref, no_no_ref) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+    db_handler.cursor.execute(insert_statement, (*case, *data[case]))
 
+db_handler.finalize()

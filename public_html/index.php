@@ -1,31 +1,20 @@
-<head>
+<?php
+require_once('header.php');
 
-<title>Wikidata Analyst</title>
+function fixer($number) {
+	return number_format((float)$number, 3, '.', '');
+};
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="Keywords" content="wikidata,analysis,quality">
-<meta name="Description" content="A tool to give better insight to people who want to improve or examine quality of Wikidata">
-
-<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css"><script src="semantic/dist/semantic.min.js"></script>
-<body>
-  <div class="main nav">
-    <div class="ui inverted main menu">
-      <div class="container">
-        <div class="left menu">
-          <div class="title item">
-            <b>Wikidata Analyst</b>
-          </div><a href="/wd-analyst/index.php" class="launch item">Home</a>
-		<a href="/" class="launch item">Labs</a>
-        </div>
-
-        <div class="right menu">
-          <a href="/wd-analyst/about.php" class="item">About</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
+error_reporting(E_ERROR|E_CORE_ERROR|E_COMPILE_ERROR); // E_ALL|
+ini_set('display_errors', 'On');
+$dbmycnf = parse_ini_file("../replica.my.cnf");
+$dbuser = $dbmycnf['user'];
+$dbpass = $dbmycnf['password'];
+unset($dbmycnf);
+$dbhost = "tools-db";
+$dbname = "s52781__wd_p";
+$db = new PDO('mysql:host='.$dbhost.';dbname='.$dbname.';charset=utf8', $dbuser, $dbpass);
+?>
 <div class="ui tabular menu" style="padding:10px 10px 0px 10px;">
   <a class="item active">
     Property-based analysis
@@ -39,18 +28,6 @@
 </div>
 
 <?php
-error_reporting(E_ERROR|E_CORE_ERROR|E_COMPILE_ERROR); // E_ALL|
-ini_set('display_errors', 'On');
-$dbmycnf = parse_ini_file("../replica.my.cnf");
-$dbuser = $dbmycnf['user'];
-$dbpass = $dbmycnf['password'];
-unset($dbmycnf);
-$dbhost = "tools-db";
-$dbname = "s52781__wd_p";
-function fixer($number) {
-	return number_format((float)$number, 3, '.', '');
-};
-$db = new PDO('mysql:host='.$dbhost.';dbname='.$dbname.';charset=utf8', $dbuser, $dbpass);
 if (!isset($_REQUEST['p'])) { ?>
 <div style="padding:1em;width:50em;">
 <div class="ui message">
