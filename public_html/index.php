@@ -53,6 +53,16 @@ if (!isset($_REQUEST['p'])) { ?>
 <?php
 } else {
 	$p = ucfirst($_REQUEST['p']);
+	if (!isset($_REQUEST['limit']) | !$_REQUEST['limit']) {
+		$_REQUEST['limit'] = 5;
+	};
+	if (!is_numeric($_REQUEST['limit'])) {
+		Error("It seems limit is not set correctly");
+	};
+	$limit = $_REQUEST['limit'] + 0;
+	if ($limit > 50 ) {
+		Error("Maximum value for limit is 50");
+	};
 	if (!isset($_REQUEST['q']) | !$_REQUEST['q']) {
 		$_REQUEST['q'] = 'Q0';
 	};
@@ -64,53 +74,23 @@ if (!isset($_REQUEST['p'])) { ?>
 		$q = ucfirst($q);
 		if (substr($q, 0, 1) === 'Q') { $q = substr($q, 1); }
 		if (!is_numeric($q)) {
-?>
-<div style="padding:1em;width:50em;">
-<div class="ui negative message">
-  <div class="header">
-    Thata's bad!
-  </div>
-  <p>It seems your values for property and/or value is incorrect. Bear in mind we only support Wikidata item (Q###) for value.</p>
-</div>
-</div>
-<?php
-		die('ValueError');
+			Error();
 		};
 		$n_q[] = $q + 0;
 	};
 	if (!is_numeric($p)) {
-?>
-<div style="padding:1em;width:50em;">
-<div class="ui negative message">
-  <div class="header">
-    Thata's bad!
-  </div>
-  <p>It seems your values for property and/or value is incorrect. Bear in mind we only support Wikidata item (Q###) for value.</p>
-</div>
-</div>
-<?php
-	die('ValueError');
+		Error();
 	};
 	$p = $p + 0;
 	if ($n_q[0] === 0) {
-		$sql = "SELECT * FROM property WHERE property = " . $p . " ORDER BY no_uniq_items DESC LIMIT 5";
+		$sql = "SELECT * FROM property WHERE property = " . $p . " ORDER BY no_uniq_items DESC LIMIT " . $limit;
 	} else {
 		$sql = "SELECT * FROM property WHERE property = " . $p . " and value IN (0,".implode(',',$n_q).") ORDER BY no_uniq_items DESC";
 	};
 	$result = $db->query($sql);
 	$result = $result->fetchAll();
 	if (!$result) {
-?>
-<div style="padding:1em;width:50em;">
-<div class="ui negative message">
-  <div class="header">
-    Thata's bad!
-  </div>
-  <p>It seems your we can't find anything from our database. Bear in mind we only support Wikidata item (Q###) for value.</p>
-</div>
-</div>
-<?php
-	die('ValueError');
+		Error("It seems your we can't find anything from our database. Bear in mind we only support Wikidata item (Q###) for value.");
 	};
 ?>
 <div style="padding:2em;">
@@ -120,7 +100,7 @@ if (!isset($_REQUEST['p'])) { ?>
   </div>
   <p>This table gives you the data and charts are here because they are cool!<br>Last update: 2015-11-30</p>
 </div>
-<table class="ui celled table">
+<table class="ui selectable celled table">
   <thead>
     <tr><th>Property</th>
     <th>Value</th>

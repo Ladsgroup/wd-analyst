@@ -25,3 +25,22 @@
       </div>
     </div>
   </div>
+<?php
+
+function Error($mssg="It seems your values for property and/or value is incorrect. Bear in mind we only support Wikidata item (Q###) for value.") {
+	?>
+	<div style="padding:1em;width:50em;">
+	<div class="ui negative message">
+	  <div class="header">
+	    That's bad!
+	  </div>
+	  <p>
+<?php
+	echo $mssg;
+?>
+	  </p>
+	</div>
+	</div>
+	<?php
+	die('ValueError');
+}

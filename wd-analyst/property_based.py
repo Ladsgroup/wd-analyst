@@ -1,7 +1,7 @@
 from core import DumpReader, DatabaseHandler
 
 import sys
-dump = DumpReader('/public/dumps/public/wikidatawiki/entities/20151130/wikidata-20151130-all.json.bz2', 20000)
+dump = DumpReader('/public/dumps/public/wikidatawiki/entities/20151201/wikidata-20151201-all.json.bz2', 5)
 data = {}
 
 
@@ -65,7 +65,7 @@ no_descriptions INT(15) NOT NULL,
 no_claims INT(15) NOT NULL,
 no_qua INT(15) NOT NULL,
 no_ref INT(15) NOT NULL,
-no_wiki_ref INT(15) NOT NULL
+no_wiki_ref INT(15) NOT NULL,
 no_no_ref INT(15) NOT NULL
 );
 """
@@ -81,6 +81,6 @@ for case in data:
         "(property, value, no_item, no_uniq_items, no_labels, no_site_links, "
         "no_descriptions, no_claims, no_qua, no_ref, no_wiki_ref, no_no_ref) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
-    db_handler.cursor.execute(insert_statement, (*case, *data[case]))
+    db_handler.cursor.execute(insert_statement, tuple(case) + tuple(data[case]))
 
 db_handler.finalize()
