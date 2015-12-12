@@ -11,8 +11,7 @@ This code consists of two parts:
 
 # TODO list
 * Support more properties and data types
-* Refactor the PHP file to make it easier to develop
-* Build Sitelink-based and Reference-based analyst
+* Build Sitelink-based analyst
 * Automatic running of the dump reader
 
 # Authors

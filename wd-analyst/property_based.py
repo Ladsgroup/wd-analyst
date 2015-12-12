@@ -1,7 +1,7 @@
 from core import DumpReader, DatabaseHandler
 
 import sys
-dump = DumpReader('/public/dumps/public/wikidatawiki/entities/20151201/wikidata-20151201-all.json.bz2', 5)
+dump = DumpReader('/data/project/wd-analyst/wikidata-20151207-all.json.bz2')
 data = {}
 
 
@@ -46,14 +46,14 @@ for item_content in dump.run():
                 new_data = [data_to_add[i] + old_data[i] for i in range(len(data_to_add))]
                 data[(pid_int, val)] = new_data
 
-db_handler = DatabaseHandler('propertyy')
+db_handler = DatabaseHandler('property')
 
 db_handler.connect()
-db_handler.cursor.execute('DROP TABLE propertyy;')
+db_handler.cursor.execute('DROP TABLE property;')
 db_handler.finalize()
 
 sql_query = """
-CREATE TABLE propertyy
+CREATE TABLE property
 (
 property INT(15) NOT NULL,
 value INT(15) NOT NULL,

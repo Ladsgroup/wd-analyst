@@ -98,7 +98,7 @@ if (!isset($_REQUEST['p'])) { ?>
   <div class="header">
     Results are ready!
   </div>
-  <p>This table gives you the data and charts are here because they are cool!<br>Last update: 2015-11-30</p>
+  <p>This table gives you the data and charts are here because they are cool!<br>Last update: 2015-12-06</p>
 </div>
 <table class="ui selectable celled table">
   <thead>
@@ -106,6 +106,7 @@ if (!isset($_REQUEST['p'])) { ?>
     <th>Value</th>
     <th>Number of statements</th>
     <th>Number of items</th>
+    <th>Number of unsourced statements</th>
     <th>Ave. labels</th>
     <th>Ave. sitelinks</th>
     <th>Ave. descriptions</th>
@@ -134,10 +135,10 @@ if (!isset($_REQUEST['p'])) { ?>
 			$pie_data2[] = $row[1];
 			$row[1] = "<a href=\"https://wikidata.org/wiki/" . $row[1] . "\">". $row[1] . "</a>";
 		};
-		$d = array($row[0], $row[1], number_format($row[2]), number_format($row[3]), fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2]), fixer($row[8] / $row[2]), fixer($row[9] / $row[2]), fixer($row[10] / $row[2]));
+		$d = array($row[0], $row[1], number_format($row[2]), number_format($row[3]), fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2]), fixer($row[8] / $row[2]), fixer($row[9] / $row[2]), fixer($row[10] / $row[2]), number_format($row[11]), intval(($row[11] * 100) / $row[2]));
 		$bar_data[] = implode(',', array(fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2])));
 		$bar_data2[] = implode(',', array(fixer($row[8] / $row[2]), fixer($row[9] / $row[2]), fixer($row[10] / $row[2])));
-		echo "<tr>\n<td>{$d[0]}</td>\n<td>{$d[1]}</td><td>{$d[2]}</td><td>{$d[3]}</td><td>{$d[4]}</td><td>{$d[5]}</td><td>{$d[6]}</td><td>{$d[7]}</td><td>{$d[8]}</td><td>{$d[9]}</td><td>{$d[10]}</td></tr>";
+		echo "<tr>\n<td>{$d[0]}</td>\n<td>{$d[1]}</td><td>{$d[2]}</td><td>{$d[3]}</td><td>{$d[11]} ($d[12]%)</td><td>{$d[4]}</td><td>{$d[5]}</td><td>{$d[6]}</td><td>{$d[7]}</td><td>{$d[8]}</td><td>{$d[9]}</td><td>{$d[10]}</td></tr>";
 	};
 echo "</tbody>\n</table>";
 $pie_data[] = $first_row - $sum_pie;

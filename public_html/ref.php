@@ -116,7 +116,7 @@ if (!isset($_REQUEST['p'])) { ?>
   <div class="header">
     Results are ready!
   </div>
-  <p>This table gives you the data and charts are here because they are cool!<br>Last update: 2015-11-30</p>
+  <p>This table gives you the data and charts are here because they are cool!<br>Last update: 2015-12-06</p>
 </div>
 <table class="ui selectable celled table">
   <thead>
