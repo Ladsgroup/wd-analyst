@@ -44,3 +44,20 @@ function Error($mssg="It seems your values for property and/or value is incorrec
 	<?php
 	die('ValueError');
 }
+
+function LabelGetter($ids, $lang="en") {
+	$url = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=" . implode("|", $ids) . "&props=labels&format=json&languages=" . $lang;
+	$res = json_decode(file_get_contents($url), true);
+	$final_res = array();
+	if (!isset($res["success"]) | $res["success"] !== 1) {
+		return $ids;
+	}
+	foreach ($ids as $id) {
+		if (isset($res["entities"][$id]["labels"][$lang]["value"])) {
+			$final_res[] = $res["entities"][$id]["labels"][$lang]["value"];
+		} else {
+			$final_res[] = $id;
+		}
+	}
+	return $final_res;
+}

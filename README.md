@@ -1,6 +1,8 @@
 # wd-analyst
 Tool to analyze Wikidata comprehensively
 
+It's hosted at https://tools.wmflabs.org/wd-analyst
+
 This code consists of two parts:
 * The python dump reader, which reads JSON dumps and populates a database
 * The PHP database reader, which queries the database

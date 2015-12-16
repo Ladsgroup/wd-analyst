@@ -9,3 +9,6 @@ require_once('header.php');
 This tool is made with <3 by <a href="https://wikidata.org/wiki/User:Ladsgroup">Amir</a>. Source code is <a href="https://github.com/Ladsgroup/wd-analyst">published under MIT license</a>.
 </div>
 </div>
+<?php
+require_once('footer.php');
+?>

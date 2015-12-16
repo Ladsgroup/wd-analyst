@@ -40,15 +40,15 @@ if (!isset($_REQUEST['p'])) { ?>
   <div class="fields">
     <div class="field">
       <label>Property (Reference)</label>
-      <input name="p" placeholder="P143" type="text">
+      <input name="p" placeholder="e.g. P143" type="text">
     </div>
     <div class="field">
       <label>Value</label>
-      <input name="q" placeholder="Q328" type="text">
+      <input name="q" placeholder="e.g. Q328" type="text">
     </div>
     <div class="field">
       <label>Property (Claim)</label>
-      <input name="pp" placeholder="P31" type="text">
+      <input name="pp" placeholder="e.g. P31" type="text">
     </div>
   </div>
 <button class="ui button" type="submit">Run the query</button>
@@ -139,23 +139,39 @@ if (!isset($_REQUEST['p'])) { ?>
 	$sum_pie = 0;
 	$bar_data = array();
 	$bar_data2 = array();
+	$labels_old = array();
+	foreach ($result as $row) {
+		if ($row[1] == 0) {
+			$labels_old[] = "P" . $row[0];
+		} else {
+			$labels_old[] = "P" . $row[1];
+		};
+		if ($row[2] != 0) {
+			$labels_old[] = "Q" . $row[2];
+		};
+	};
+	$labels = array();
+	$label_res = LabelGetter($labels_old);
+	for($i = 0, $size = count($labels_old); $i < $size; ++$i) {
+	    $labels[$labels_old[$i]] = $label_res[$i];
+	}
 	foreach ($result as $row) {
 		if ($row[1] == 0) {
 			$row[1] = "\n<div class=\"ui ribbon label\">All values</div>\n";
-			$row[0] = "<a href=\"https://wikidata.org/wiki/Property:P" . $row[0] . "\">P". $row[0] . "</a>";
+			$row[0] = "<a href=\"https://wikidata.org/wiki/Property:P" . $row[0] . "\">". $labels["P" . $row[0]] . "</a>";
 		} else {
-			$row[0] = "P" . $row[0];
-			$row[1] = "P" . $row[1];
+			$row[0] = $labels["P" . $row[0]];
+			$row[1] = "P" .  $row[1];
 			$sum_pie = $sum_pie + (int)$row[3];
 			$pie_data[] = $row[3];
 			$pie_data2[] = $row[1];
-			$row[1] = "<a href=\"https://wikidata.org/wiki/Property:" . $row[1] . "\">". $row[1] . "</a>";
+			$row[1] = "<a href=\"https://wikidata.org/wiki/Property:" . $row[1] . "\">". $labels[$row[1]] . "</a>";
 		};
 		if ($row[2] == 0) {
 			$row[2] = "\n<div class=\"ui ribbon label\">All values</div>\n";
 		} else {
 			$row[2] = "Q" . $row[2];
-			$row[2] = "<a href=\"https://wikidata.org/wiki/" . $row[2] . "\">". $row[2] . "</a>";
+			$row[2] = "<a href=\"https://wikidata.org/wiki/" . $row[2] . "\">". $labels[$row[2]] . "</a>";
 		};
 		$d = array($row[0], $row[2], $row[1], number_format($row[3]), fixer($row[4] / $row[3]), fixer($row[5] / $row[3]), fixer($row[6] / $row[3]), fixer($row[7] / $row[3]), fixer($row[8] / $row[3]), fixer($row[9] / $row[3]));
 		//$bar_data[] = implode(',', array(fixer($row[4] / $row[2]), fixer($row[5] / $row[2]), fixer($row[6] / $row[2]), fixer($row[7] / $row[2])));
@@ -178,4 +194,5 @@ echo "</tbody>\n</table>";
 //echo "<img src=\"bar.php?d=$bar_data2&title=Average data per claim&x=&y=&xaxis=qualifier|ref.|wiki ref.&legend=$legend\">";
 //echo "</div></div>";
 };
+require_once('footer.php');
 ?>
