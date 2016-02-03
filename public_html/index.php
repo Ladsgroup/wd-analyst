@@ -34,7 +34,7 @@ if (!isset($_REQUEST['p'])) { ?>
   <div class="header">
     Let's start!
   </div>
-  <p>Hey! Please determine what property-value pair you want to see. If you want to get result for all values of your property leave value part blank.<br /><br />
+  <p>Hey! Please determine what property-value pair you want to see. If you want to get result for all values of your property, leave value part blank.<br /><br />
 You can give only a property and it gives you the four most
 used values + analyze of sources and quality in overall (<a href="http://tools.wmflabs.org/wd-analyst/index.php?p=P31">Run the query</a>)<br />
 You also can give a property and multiple values you want. <a href="http://tools.wmflabs.org/wd-analyst/index.php?p=P27&q=Q30|Q183">For example</a> in case you want to compare P27:Q183 (Country of citizenship: Germany) and P27:Q30 (US) you should use "Q30|Q183".</p>
